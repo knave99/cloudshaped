@@ -20,9 +20,11 @@
 		<?php include('php_includes/head.inc.php'); ?>		
 	</HEAD>
 	<BODY>
-		<DIV id="main">
-			<A HREF='<?php echo "http://$site_name/page2.php" ?>/'>My Link</A>
-		</DIV>
+		<DIV id="wrap">
+			<DIV id="main">
+				<A HREF='<?php echo "http://$site_name/page2.php" ?>/'>My Link</A>
+			</DIV>
+		</DIV>			
 		<DIV id="footer">
 			hello!
 		</DIV>

@@ -5,30 +5,17 @@
 	background: red;
 }
 .body {
-	/*
 	width: 100%;
 	margin-top: 152px;
 	margin-bottom: 152px;
 	height: ;
 	background: blue;
 	border: 1px solid red;
-	*/
-	content:"";
-	height:100%;
-	float:left;
-	width:0;
-	margin-top:-32767px;/* thank you Erik J - negate effect of float*/	
 }
 .footer {
-	/*
 	height: 150px;
 	width: 100%;	
 	background: yellow;
-*/
-	position: relative;
-	margin-top: -180px; /* negative value of footer height */
-	height: 180px;
-	clear:both; 
 }
 /*  
 Sticky Footer Solution
@@ -47,19 +34,24 @@ html, body {height: 100%;}
 
 #wrap {min-height: 100%;}
 
-#main {overflow:auto;
-	padding-bottom: 180px;}  /* must be same height as the footer */
+#main {
+	border: 1px solid blue;
+	overflow:auto;
+	padding-bottom: 184px;
+}  /* must be same height as the footer */
 
 #footer {position: relative;
-	margin-top: -180px; /* negative value of footer height */
+	margin-top: -184px; /* negative value of footer height */
 	height: 180px;
-	clear:both;} 
+	clear:both;
+	border: 1px solid red;
+} 
 
 /*Opera Fix*/
 body:before {/* thanks to Maleika (Kohoutec)*/
-content:"";
-height:100%;
-float:left;
-width:0;
-margin-top:-32767px;/* thank you Erik J - negate effect of float*/
+	content:"";
+	height:100%;
+	float:left;
+	width:0;
+	margin-top:-32767px;/* thank you Erik J - negate effect of float*/
 }

@@ -32,19 +32,46 @@ and your footer gets pushed down a bit more, creating vertical scroll bars in th
 
 html, body {height: 100%;}
 
-#wrap {min-height: 100%;}
+#wrap {
+	background: blue;
+	height: 100%;
+	min-height: 100%;
+}
 
-#main {
-	border: 1px solid blue;
-	overflow:auto;
-	padding-bottom: 184px;
+#header {
+	background: red;
+	min-height:70px;
+	height: 70px;
+}
+
+#content {
+	background: green;
+	width: 90%;	
+	min-height: 500px;
+	
+	float: left;
+}
+
+#column {
+	background: orange;
+	width: 10%;
+	min-height: 500px;
+	float: left;		
+}
+
+#main {	
+	height: 100%;
+	overflow:auto	
+	padding-bottom: 50px;
 }  /* must be same height as the footer */
 
-#footer {position: relative;
-	margin-top: -184px; /* negative value of footer height */
-	height: 180px;
+#footer {
+	background: yellow;	
+	
+	position: relative;
+	margin-top: -50px; /* negative value of footer height */
+	height: 50px;
 	clear:both;
-	border: 1px solid red;
 } 
 
 /*Opera Fix*/

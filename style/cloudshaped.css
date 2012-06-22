@@ -5,17 +5,30 @@
 	background: red;
 }
 .body {
+	/*
 	width: 100%;
 	margin-top: 152px;
 	margin-bottom: 152px;
 	height: ;
 	background: blue;
-	border: 1px solid red;	
+	border: 1px solid red;
+	*/
+	content:"";
+	height:100%;
+	float:left;
+	width:0;
+	margin-top:-32767px;/* thank you Erik J - negate effect of float*/	
 }
 .footer {
+	/*
 	height: 150px;
 	width: 100%;	
 	background: yellow;
+*/
+	position: relative;
+	margin-top: -180px; /* negative value of footer height */
+	height: 180px;
+	clear:both; 
 }
 /*  
 Sticky Footer Solution
@@ -50,15 +63,3 @@ float:left;
 width:0;
 margin-top:-32767px;/* thank you Erik J - negate effect of float*/
 }
-
-
-
-/* IMPORTANT
-
-You also need to include this conditional style in the <head> of your HTML file to feed this style to IE 6 and lower and 8 and higher.
-
-<!--[if !IE 7]>
-	<style type="text/css">
-		#wrap {display:table;height:100%}
-	</style>
-<![endif]-->

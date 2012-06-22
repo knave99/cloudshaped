@@ -16,15 +16,14 @@
 <HTML>	
 	<HEAD>
 		<TITLE><?php echo getPageTitle() ?></TITLE>
-		<link rel="stylesheet" type="text/css" href="style/cloudshaped.css" />		
+		<link rel="stylesheet" type="text/css" href="style/cloudshaped.css" />
+		<?php include('php_includes/head.inc.php'); ?>		
 	</HEAD>
 	<BODY>
-		<DIV class=>
+		<DIV id="main">
 			<A HREF='<?php echo "http://$site_name/page2.php" ?>/'>My Link</A>
 		</DIV>
-		<DIV#main>
-		</DIV>
-		<DIV#footer>
+		<DIV id="footer">
 			hello!
 		</DIV>
 	</BODY>

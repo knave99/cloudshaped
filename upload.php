@@ -1,7 +1,9 @@
-<?php ob_start();
+<?php 
+	ob_start();
 	try {
 		$requireList = 	array(	'php_includes/site_name.inc.php',
-								'php_includes/utility_function.inc.php'
+								'php_includes/utility_function.inc.php',
+								'php_includes/upload.inc.php',
 						);
 		$length = count($requireList);
 		for ( $i = 0; $i < $length; $i++ ) {
@@ -11,6 +13,8 @@
 				throw new Exception('could not initialize');
 			}
 		}  
+		
+	
 ?>
 <!DOCTYPE html>
 <HTML>	
@@ -31,18 +35,38 @@
 					</DIV>
 					<DIV id="rightcolumn">
 						<?php 
-							for ( $i =0;  $i < 2000;  $i++ ) {
+							if ( isset($result) ) {
+								echo '<ul>';
+								foreach ($result as $message) {
+									echo "<li>$message</li>";	
+								}
+								echo '</ul>';
+							}
 						?>
-							link to my upload page<BR>
-							<A HREF='<?php echo "http://$siteName/upload.php" ?>/'>My Link</A>
-						<?php } ?>									
+						<form action="" method="post" enctype="multipart/form-data" id="uploadImage">
+							<P>
+								<label for="image">Upload Image:</label>
+								<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $maxFileSize; ?>"/>
+								<input type="file" name="image" id="image"/>
+							</P>
+							<P>
+								<input type="submit" name="upload" id="upload" value="upload"/>
+							</P>
+						</form>
+						<PRE>
+							<?php
+								if (isset($_POST['upload'])) {
+									print_r($_FILES);
+								}
+							?>
+						</PRE>
 					</DIV>
 				</DIV>			
 			</DIV>
 		</DIV>			
 		<DIV id="footer">
 			footer
-		</DIV>
+		</DIV>	
 	</BODY>
 </HTML>
 <?php 

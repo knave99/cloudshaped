@@ -1,22 +1,5 @@
 @CHARSET "ISO-8859-1";
-.header {
-	height: 150px;
-	width: 100%;
-	background: red;
-}
-.body {
-	width: 100%;
-	margin-top: 152px;
-	margin-bottom: 152px;
-	height: ;
-	background: blue;
-	border: 1px solid red;
-}
-.footer {
-	height: 150px;
-	width: 100%;	
-	background: yellow;
-}
+
 /*  
 Sticky Footer Solution
 by Steve Hatcher 
@@ -35,7 +18,7 @@ html, body {height: 100%;}
 #wrap {
 	background: blue;
 	height: 100%;
-	min-height: 100%;
+	min-height: 600px;	
 }
 
 #header {
@@ -47,22 +30,19 @@ html, body {height: 100%;}
 #content {
 	background: green;
 	width: 90%;	
-	min-height: 500px;
-	
 	float: left;
 }
 
 #column {
 	background: orange;
 	width: 10%;
-	min-height: 500px;
-	float: left;		
+	float: left;	
 }
 
-#main {	
+#main {		
 	height: 100%;
-	overflow:auto	
-	padding-bottom: 50px;
+	overflow:auto;
+	padding-bottom: -50px;
 }  /* must be same height as the footer */
 
 #footer {

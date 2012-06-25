@@ -29,19 +29,27 @@ html, body {height: 100%;}
 
 #content {
 	background: green;
-	width: 90%;	
-	float: left;
+	overflow: none;	
 }
 
-#column {
+#leftcolumn {
+	min-height: 500px;
 	background: orange;
 	width: 10%;
 	float: left;	
 }
 
+#rightcolumn {	
+	min-height: 500px;
+	background: white;
+	width: 90%;
+	float: left;
+}
+
+
 #main {		
 	height: 100%;
-	overflow:auto;
+	overflow:none;
 	padding-bottom: -50px;
 }  /* must be same height as the footer */
 

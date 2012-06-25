@@ -24,14 +24,26 @@
 			<DIV id="main">
 				<DIV id="header">
 					header
-				</DIV>
-				<DIV id="column">
-						column
 				</DIV>	
 				<DIV id="content">
-				
-					content<BR/>
-					<A HREF='<?php echo "http://$site_name/page2.php" ?>/'>My Link</A>
+					<DIV id="leftcolumn">
+						column
+					</DIV>
+					<DIV id="rightcolumn">
+						<?php 
+							for ( $i =0;  $i < 2;  $i++ ) {
+						?>
+							Lorum ipsum blah blah<BR>
+							<A HREF='<?php echo "http://$site_name/page2.php" ?>/'>My Link</A>
+						<?php } ?>					
+						content<BR/>
+						content<BR/>
+						content<BR/>
+						content<BR/>
+						content<BR/>
+						content<BR/>
+						content<BR/>					
+					</DIV>
 				</DIV>			
 			</DIV>
 		</DIV>			

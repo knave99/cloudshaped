@@ -15,7 +15,7 @@ if ( isset( $_POST['upload'] ) ) {
 	//move_uploaded_file($_FILES['image']['tmp_name'], $destination . $_FILES['image']['name']);
 	try {
 		$upload = new Rsc_Upload($destination, $permittedFileTypes, $maxFileSize);
-		$upload->move();
+		$upload->move(true);
 		$result = $upload-> getMessages();
 	} catch (Exception $e) {
 		echo $e->getMessage();
@@ -84,16 +84,21 @@ class Rsc_Upload {
 	/**
 	 * Moves the file from the temp directory to the assigned directory
 	 */  
-	public function move() {
+	public function move($overwrite = false) {
 		$field = current($this->_uploaded);
 		$OK = $this->checkError($field['name'], $field['error']);
 		if ( $OK ) {
 			$sizeOK = $this->checkSize($field['name'], $field['size']);
 			$typeOK = $this->checkType($field['name'], $field['type']);
 			if ( $sizeOK && $typeOK ) {
-				$success = move_uploaded_file($field['tmp_name'], $this->_destination . $field['name']);		
+				$name = $this->checkName($field['name'], $overwrite);
+				$success = move_uploaded_file($field['tmp_name'], $this->_destination . $name);		
 				if ($success) {
-					$this->_messages[] = $field['name'] . ' uploaded successfully';
+					$message = $field['name'] . ' uploaded successfully';
+					if ($this->_renamed) {
+						$message .= " and renamed $name.";
+					}
+					$this->_messages[] = $message;
 				} else {
 					$this->_messages[] = 'Could not upload ' . $field['name'];
 				}
@@ -155,5 +160,32 @@ class Rsc_Upload {
 	}
 	public function getMaxSize() {
 		return number_format($this->_maxFileSize / 1024, 1) . 'kB';
+	}
+	
+	protected function checkName($name, $overwrite) {
+		$noSpaces = str_replace(' ', '_', $name);
+		if ($noSpaces != $name) {
+			$this->_renamed = true; 
+		}
+		if (!$overwrite) {
+			//rename the file if it already exists
+			$existing = scandir($this->_destination);
+			if (in_array($noSpaces, $existing)) {
+				$dot = strrpos($noSpaces, '.');
+				if ($dot) {
+					$base = substr($noSpaces,0, $dot);
+					$extension = substr($noSpaces, $dot);
+				} else {
+					$base = $noSpaces;
+					$extension = '';
+				}
+				$i = 1;
+				do {
+					$noSpaces = $base . '_' . $i++ . $extension;	// seems sloppy?
+				} while (in_array($noSpaces, $existing));
+				$this->_renamed = true;
+			}
+		}
+		return $noSpaces;
 	}
 }

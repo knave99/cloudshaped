@@ -86,23 +86,39 @@ class Rsc_Upload {
 	 */  
 	public function move($overwrite = false) {
 		$field = current($this->_uploaded);
-		$OK = $this->checkError($field['name'], $field['error']);
+		if (is_array($field['name'])) {		// if there's more than 1 file
+			foreach ($field['name'] as $number => $fileName ) {
+				// process multiple files
+				$this->_renamed = false;
+				$this->processFile(	$field['name'], $field['error'], $field['size'], 
+									$field['type'], $field['tmp_name'], $overwrite
+						);				
+			}			
+		} else {
+			$this->processFile(	$field['name'], $field['error'], $field['size'],
+					$field['type'], $field['tmp_name'], $overwrite
+			);			
+		}
+	}
+	
+	protected function processFile($fileName, $error, $size, $type, $tmpName, $overwrite) {
+		$OK = $this->checkError($fileName, $error);
 		if ( $OK ) {
-			$sizeOK = $this->checkSize($field['name'], $field['size']);
-			$typeOK = $this->checkType($field['name'], $field['type']);
+			$sizeOK = $this->checkSize($fileName, $size);
+			$typeOK = $this->checkType($fileName, $type);
 			if ( $sizeOK && $typeOK ) {
-				$name = $this->checkName($field['name'], $overwrite);
-				$success = move_uploaded_file($field['tmp_name'], $this->_destination . $name);		
+				$name = $this->checkName($fileName, $overwrite);
+				$success = move_uploaded_file($fileName, $this->_destination . $name);
 				if ($success) {
-					$message = $field['name'] . ' uploaded successfully';
+					$message = $fileName . ' uploaded successfully';
 					if ($this->_renamed) {
 						$message .= " and renamed $name.";
 					}
 					$this->_messages[] = $message;
 				} else {
-					$this->_messages[] = 'Could not upload ' . $field['name'];
+					$this->_messages[] = 'Could not upload ' . $fileName;
 				}
-			}		
+			}
 		}
 	}
 	

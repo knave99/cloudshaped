@@ -1,7 +1,13 @@
 <?php
 $maxFileSize = 512000;					// max file size in bytes
 $destination = 'c:/xuploads/';  		//define the path to the upload folder
-$permittedFileTypes = array('image/gif', 'image/jpeg', 'image/pjpeg', 'image/png', 'text/plain', 'text/log');
+$permittedFileTypes = array('image/gif', 
+							'image/jpeg', 
+							'image/pjpeg', 
+							'image/png', 
+							'text/plain',
+							'application/vnd.ms-excel', 
+							'text/log');
 
 if ( isset( $_POST['upload'] ) ) {
 
@@ -40,6 +46,41 @@ class Rsc_Upload {
 		$this->_maxFileSize = $maxFileSize;
 	}
 	
+	public function addPermitedMimeTypes($mimeTypes) {
+		$fileTypes = (array) $mimeTypes;
+		$this->isValidMimeType($mimeTypes);
+		$this->_permittedFileTypes = array_merge($this->_permittedFileTypes, $mimeTypes);
+	}
+	
+	public function setPermittedMimeTypes($mimeTypes) {
+		$mimeTypes = (array) $mimeTypes;
+		$this->isValidMimeType($mimeTypes);
+		$this->_permittedFileTypes = $mimeTypes;
+	}
+	
+	protected function isValidMimeType($mimeTypes) {
+		$alsoValid = 	array(		'image/tiff',
+									'application/pdf',
+									'text/plain',
+									'text/rtf'
+							);
+		$valid = array_merge($this->_permittedFileTypes, $alsoValid);
+		foreach ($mimeTypes as $type) {
+			if (!in_array($type, $valid)) {
+				throw new Exception("$type is not permitted MIME type");
+			}
+		}
+	}
+	
+	public function setMaxSize($num) {
+		if (!is_numeric($num)) {
+			throw new Exception("Maximum size must be a number.");
+		} else if ( $num < 0 ) {
+			throw new Exception("Maximum size cannot be less than 0.");
+		}
+		$this->_maxFileSize = (int) $num;
+	}
+	
 	/**
 	 * Moves the file from the temp directory to the assigned directory
 	 */  
@@ -49,11 +90,13 @@ class Rsc_Upload {
 		if ( $OK ) {
 			$sizeOK = $this->checkSize($field['name'], $field['size']);
 			$typeOK = $this->checkType($field['name'], $field['type']);
-			$success = move_uploaded_file($field['tmp_name'], $this->_destination . $field['name']);		
-			if ($success) {
-				$this->_messages[] = $field['name'] . ' uploaded successfully';
-			} else {
-				$this->_messages[] = 'Could not upload ' . $field['name'];
+			if ( $sizeOK && $typeOK ) {
+				$success = move_uploaded_file($field['tmp_name'], $this->_destination . $field['name']);		
+				if ($success) {
+					$this->_messages[] = $field['name'] . ' uploaded successfully';
+				} else {
+					$this->_messages[] = 'Could not upload ' . $field['name'];
+				}
 			}		
 		}
 	}
@@ -98,10 +141,14 @@ class Rsc_Upload {
 		}
 	}
 	
-	protected function checkType($filename, $type) { 
-		if ( !in_array($type, $this->_permittedFileTypes )) {
+	protected function checkType($filename, $type) {
+		if ( empty($type) ) {
+			return false;
+						
+		} elseif ( !in_array($type, $this->_permittedFileTypes )) {
 			$this->_messages[] = "$filename is not a permitted type of file.";
 			return false;
+			
 		} else {
 			return true;
 		}

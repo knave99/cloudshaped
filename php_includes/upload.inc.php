@@ -11,11 +11,11 @@ $permittedFileTypes = array('image/gif',
 
 if ( isset( $_POST['upload'] ) ) {
 
-	//move the file and rename
-	//move_uploaded_file($_FILES['image']['tmp_name'], $destination . $_FILES['image']['name']);
+
 	try {
 		$upload = new Rsc_Upload($destination, $permittedFileTypes, $maxFileSize);
-		$upload->move(true);
+		$upload->addPermitedMimeTypes('application/pdf');
+		$upload->move();
 		$result = $upload-> getMessages();
 	} catch (Exception $e) {
 		echo $e->getMessage();
@@ -47,7 +47,7 @@ class Rsc_Upload {
 	}
 	
 	public function addPermitedMimeTypes($mimeTypes) {
-		$fileTypes = (array) $mimeTypes;
+		$mimeTypes = (array) $mimeTypes;
 		$this->isValidMimeType($mimeTypes);
 		$this->_permittedFileTypes = array_merge($this->_permittedFileTypes, $mimeTypes);
 	}
@@ -60,9 +60,9 @@ class Rsc_Upload {
 	
 	protected function isValidMimeType($mimeTypes) {
 		$alsoValid = 	array(		'image/tiff',
-									'application/pdf',
 									'text/plain',
-									'text/rtf'
+									'text/rtf',
+									'application/pdf'
 							);
 		$valid = array_merge($this->_permittedFileTypes, $alsoValid);
 		foreach ($mimeTypes as $type) {
@@ -90,8 +90,12 @@ class Rsc_Upload {
 			foreach ($field['name'] as $number => $fileName ) {
 				// process multiple files
 				$this->_renamed = false;
-				$this->processFile(	$field['name'], $field['error'], $field['size'], 
-									$field['type'], $field['tmp_name'], $overwrite
+				$this->processFile(	$fileName, 
+									$field['error'][$number], 
+									$field['size'][$number], 
+									$field['type'][$number], 
+									$field['tmp_name'][$number], 
+									$overwrite
 						);				
 			}			
 		} else {
@@ -108,7 +112,7 @@ class Rsc_Upload {
 			$typeOK = $this->checkType($fileName, $type);
 			if ( $sizeOK && $typeOK ) {
 				$name = $this->checkName($fileName, $overwrite);
-				$success = move_uploaded_file($fileName, $this->_destination . $name);
+				$success = move_uploaded_file($tmpName, $this->_destination . $name);
 				if ($success) {
 					$message = $fileName . ' uploaded successfully';
 					if ($this->_renamed) {
@@ -145,7 +149,7 @@ class Rsc_Upload {
 						return false;
 					}
 			default: 	{
-							$this->_messages[] = "System error uploading $filename.  Contact webmaster.";
+							$this->_messages[] = "System error uploading $filename.  Contact webmaster. ";
 							return false;
 						}
 		}
